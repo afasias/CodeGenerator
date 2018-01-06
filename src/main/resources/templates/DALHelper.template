@@ -1,0 +1,12 @@
+package [DAL_PACKAGE];
+
+public class DALHelper {
+
+    public static String stringRepeat(String string, int iterations) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < iterations; i++) {
+            sb.append(string);
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,5 @@
+package [DAL_PACKAGE];
+
+public interface Callback<T extends BaseModel> {
+    public void objectFetched( T object );
+}

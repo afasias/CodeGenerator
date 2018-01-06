@@ -1,0 +1,26 @@
+package [MODELS_PACKAGE];
+
+public class ID {
+    
+    protected Integer id;
+    
+    protected ID() {
+    }
+    
+    public ID( Integer id ) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+    
+    public void setId( Integer id ) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && getClass().equals(obj.getClass()) && ((ID)obj).id != null && ((ID)obj).id == id;
+    }
+}

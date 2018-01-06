@@ -1,0 +1,14 @@
+package [MODELS_PACKAGE];
+
+abstract public class ChildModel extends BaseModel {
+    
+    protected Integer parentId;
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+}

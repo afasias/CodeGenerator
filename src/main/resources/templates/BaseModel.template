@@ -1,0 +1,18 @@
+package [MODELS_PACKAGE];
+
+abstract public class BaseModel extends ID {
+    
+    protected boolean markedForDeletion;
+
+    public boolean isMarkedForDeletion() {
+        return markedForDeletion;
+    }
+
+    public void markForDeletion() {
+        this.markedForDeletion = true;
+    }
+    
+    public boolean isPersistent() {
+        return getId() != null;
+    }
+}

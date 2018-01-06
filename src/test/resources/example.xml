@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Invoices" src="generated/" package="com.giannistsakiris.examples">
+    
+    <lookup name="City" table="cities" length="128"/>
+    <lookup name="Area" table="areas" length="128"/>
+    <lookup name="Prefecture" table="prefectures" length="128"/>
+    <lookup name="Country" table="countries" length="255"/>
+    <lookup name="Doy" table="doys" length="255"/>
+    <lookup name="KepyoStatus" table="kepyo_statuses" length="64"/>
+    <lookup name="Unit" table="units" length="64"/>
+    <lookup name="Activity" table="activities" length="64"/>
+    <lookup name="Currency" table="currencies" length="64"/>
+    <lookup name="TraffickingPurpose" table="trafficking_purposes" length="64"/>
+    <lookup name="PaymentType" table="payment_types" length="64"/>
+    <lookup name="Postcode" table="postcodes" length="16"/>
+    
+    <type name="FpaCategory" table="fpa_categories">
+        <member name="name" type="String" length="24" label="true"/>
+        <member name="percent" type="Integer"/>
+    </type>
+	
+    <type name="Address" table="addresses" slave="true">
+        <lookup name="Type" table="types" length="32"/>
+        <member name="type" type="Type"/>
+        <member name="street" type="String" length="64"/>
+        <member name="city" type="City"/>
+        <member name="area" type="Area"/>
+        <member name="postcode" type="Postcode" length="8"/>
+        <member name="prefecture" type="Prefecture"/>
+        <member name="country" type="Country"/>
+    </type>
+	
+    <type name="Contact" table="contacts" slave="true">
+        <lookup name="Title" table="titles" length="32"/>
+        <type name="Detail" table="details" slave="true">
+            <lookup name="Medium" table="media" length="32"/>
+            <member name="medium" type="Medium"/>
+            <member name="description" type="String" length="64"/>
+        </type>
+        <member name="title" type="Title"/>
+        <member name="first_name" type="String" length="64"/>
+        <member name="last_name" type="String" length="64"/>
+        <member name="details" type="Detail" collection="true"/>
+    </type>
+        
+    <type name="Client" table="clients">
+        <lookup name="Category" table="categories" length="64"/>
+        <enumeration name="Type">
+            <value>RETAIL</value>
+            <value>WHOLESALE</value>
+        </enumeration>
+        <member name="addresses" type="Address" collection="true"/>
+        <member name="contacts" type="Contact" collection="true"/>
+        <member name="type" type="Type"/>
+        <member name="category" type="Category"/>
+        <member name="name" type="String" length="64" label="true"/>
+        <member name="activity" type="Activity"/>
+        <member name="afm" type="String" length="16" unique="true"/>
+        <member name="doy" type="Doy"/>
+        <member name="phone" type="String" length="32"/>
+        <member name="website" type="String" length="64"/>
+        <member name="comments" type="String" length="255"/>
+        <member name="discount" type="Double"/>
+        <member name="credit_limit" type="Double"/>
+        <member name="credit_days" type="Integer"/>
+        <member name="fpa_category" type="FpaCategory" parent="fpaCategories"/>
+        <member name="kepyo_status" type="KepyoStatus"/>
+        <member name="accounting_number" type="String" length="32"/>
+        <member name="newsletter_email" type="String" length="256"/>
+        <member name="newsletter_sms" type="String" length="255"/>
+        <member name="invoice_notes" type="String" length="255"/>
+        <member name="external_id" type="String" length="32" unique="true"/>
+    </type>
+
+    <type name="Supplier" table="suppliers">
+        <lookup name="Category" table="categories" length="64"/>
+        <member name="addresses" type="Address" collection="true"/>
+        <member name="contacts" type="Contact" collection="true"/>
+        <member name="category" type="Category"/>
+        <member name="name" type="String" length="64" label="true"/>
+        <member name="activity" type="Activity"/>
+        <member name="afm" type="String" length="16" unique="true"/>
+        <member name="doy" type="Doy"/>
+        <member name="phone" type="String" length="32"/>
+        <member name="website" type="String" length="64"/>
+        <member name="comments" type="String" length="255"/>
+        <member name="newsletter_email" type="String" length="255"/>
+        <member name="newsletter_sms" type="String" length="255"/>
+        <member name="external_id" type="String" length="32" unique="true"/>
+    </type>
+    
+    <type name="Product" table="products">
+        <lookup name="Category" table="categories" length="64"/>
+        <enumeration name="Type">
+            <value>PRODUCT</value>
+            <value>SERVICE</value>
+        </enumeration>
+        <member name="type" type="Type"/>
+        <member name="active" type="Boolean"/>
+        <member name="category" type="Category"/>
+        <member name="code" type="Integer" unique="true"/>
+        <member name="barcode" type="String" length="16" unique="true"/>
+        <member name="description" type="String" length="64"/>
+        <member name="unit" type="Unit"/>
+        <member name="price" type="Double"/>
+        <member name="fpa_category" type="FpaCategory" parent="fpaCategories"/>
+        <member name="supplier" type="Supplier" parent="suppliers"/>
+        <member name="information" type="String"/>
+        <member name="external_id" type="String" length="32" unique="true"/>
+    </type>
+	
+    <type name="Record" table="records">
+        <member name="datetime" type="Date"/>
+        <member name="title" type="String" length="128"/>
+        <member name="client" type="Client" parent="clients"/>
+        <member name="supplier" type="Supplier" parent="suppliers"/>
+        <member name="description" type="String" length="512"/>
+        <member name="to_all_clients" type="Boolean"/>
+        <member name="to_all_suppliers" type="Boolean"/>
+    </type>
+    
+    <type name="Company" table="companies">
+        <member name="name" type="String"/>
+        <member name="contacts" type="Contact" collection="true"/>
+        <member name="phone" type="String" length="32"/>
+        <member name="website" type="String" length="64"/>
+        <member name="newsletter_email" type="String" length="255"/>
+        <member name="newsletter_sms" type="String" length="255"/>
+        <member name="activity" type="Activity"/>
+        <member name="currency" type="Currency"/>
+        <member name="addresses" type="Address" collection="true"/>
+        <member name="afm" type="String" length="16" unique="true"/>
+        <member name="doy" type="Doy"/>
+        <member name="logo" type="String" length="128"/>
+        <member name="license_key" type="String" length="64"/>
+        <member name="mail_from_name" type="String" length="64"/>
+        <member name="mail_from_address" type="String" length="64"/>
+        <member name="mail_smtp_host" type="String" length="64"/>
+        <member name="mail_smtp_port" type="Integer"/>
+        <member name="mail_smtp_username" type="String" length="64"/>
+        <member name="mail_smtp_password" type="String" length="64"/>
+        <member name="sms_from" type="String" length="64"/>
+        <member name="sms_gateway_username" type="String" length="64"/>
+        <member name="sms_gateway_password" type="String" length="64"/>
+    </type>
+    
+    <type name="ClientRecord" table="client_records">
+        <member name="datetime" type="Date"/>
+        <member name="client" type="Client" parent="clients"/>
+        <member name="record" type="Record" parent="records"/>
+    </type>
+    
+    <type name="SupplierRecord" table="supplier_records">
+        <member name="datetime" type="Date"/>
+        <member name="supplier" type="Supplier" parent="suppliers"/>
+        <member name="record" type="Record" parent="records"/>
+    </type>
+    
+    <type name="Entry" table="document_entries" slave="true">
+        <member name="product" type="Product" parent="products"/>
+        <member name="quantity" type="Double"/>
+        <member name="discount" type="Double"/>
+        <member name="description" type="String" length="64"/>
+        <member name="unit" type="Unit"/>
+        <member name="price" type="Double"/>
+        <member name="fpa_category" type="FpaCategory" parent="fpaCategories"/>
+    </type>
+        
+    <type name="ClientPayment" table="client_payments">
+        <member name="client" type="Client" parent="clients"/>
+        <member name="type" type="PaymentType" parent="payment_types"/>
+        <member name="datetime" type="Date"/>
+        <member name="amount" type="Double"/>
+        <member name="comments" type="String" length="64"/>
+        <member name="transaction_number" type="String" length="64"/>
+        <member name="withholding" type="Double"/>
+    </type>
+    
+    <type name="SupplierPayment" table="supplier_payments">
+        <member name="supplier" type="Supplier" parent="suppliers"/>
+        <member name="type" type="PaymentType" parent="payment_types"/>
+        <member name="datetime" type="Date"/>
+        <member name="amount" type="Double"/>
+        <member name="comments" type="String" length="64"/>
+        <member name="transaction_number" type="String" length="64"/>
+        <member name="withholding" type="Double"/>
+    </type>
+    
+    <type name="InvoiceType" table="invoice_types">
+        <member name="name" type="String" length="32" label="true"/>
+        <member name="prefix" type="String" length="32"/>
+        <member name="digits" type="Integer"/>
+        <member name="invalidator" type="Boolean" key="true"/>
+    </type>
+    
+    <type name="Invoice" table="invoices">
+        <member name="type" type="InvoiceType" parent="invoiceTypes"/>
+        <member name="prefix" type="String" length="32"/>
+        <member name="number" type="Integer"/>
+        <member name="datetime" type="Date"/>
+        <member name="client" type="Client" parent="clients"/>
+        <member name="loading_address" type="Address" parent="companies_addresses"/>
+        <member name="loading_address_text" type="String" length="255"/>
+        <member name="shipping_address" type="Address" parent="clients_addresses"/>
+        <member name="shipping_address_text" type="String" length="255"/>
+        <member name="trafficking_purpose" type="TraffickingPurpose"/>
+        <member name="remarks" type="String" length="256"/>
+        <member name="entries" type="Entry" collection="true"/>
+        <member name="related_invoice" type="Invoice" parent="invoices"/>
+        <member name="prev_balance" type="Double"/>
+        <member name="total" type="Double"/>
+        <member name="netto_total" type="Double"/>
+        <member name="fpa_total" type="Double"/>
+        <member name="payment" type="ClientPayment" parent="clientPayments"/>
+        <member name="external_id" type="String" length="32" unique="true"/>
+        <dbkey field="prefix,number" unique="true"/>
+    </type>
+    
+    <type name="ExpenseType" table="types">
+        <member name="name" type="String" length="32" label="true"/>
+        <member name="prefix" type="String" length="32"/>
+        <member name="digits" type="Integer"/>
+        <member name="invalidator" type="Boolean" key="true"/>
+    </type>
+    
+    <type name="Expense" table="expenses">
+        <member name="type" type="ExpenseType" parent="expenseTypes"/>
+        <member name="prefix_number" type="String" length="64" unique="true"/>
+        <member name="datetime" type="Date"/>
+        <member name="supplier" type="Supplier" parent="suppliers"/>
+        <member name="loading_address" type="Address" parent="companies_addresses"/>
+        <member name="shipping_address" type="Address" parent="clients_addresses"/>
+        <member name="trafficking_purpose" type="TraffickingPurpose"/>
+        <member name="remarks" type="String" length="256"/>
+        <member name="entries" type="Entry" collection="true"/>
+        <member name="related_expense" type="Expense" parent="expenses"/>
+        <member name="prev_balance" type="Double"/>
+        <member name="total" type="Double"/>
+        <member name="netto_total" type="Double"/>
+        <member name="fpa_total" type="Double"/>
+        <member name="payment" type="SupplierPayment" parent="supplierPayments"/>
+        <member name="external_id" type="String" length="32" unique="true"/>
+    </type>
+    
+    <type name="Index" table="indexes">
+        <enumeration name="Type">
+            <value>CLIENT</value>
+            <value>SUPPLIER</value>
+            <value>PRODUCT</value>
+            <value>INVOICE</value>
+            <value>EXPENSE</value>
+            <value>RECORD</value>
+        </enumeration>
+        <member name="object_type" type="Type"/>
+        <member name="object_id" type="Integer"/>
+        <member name="text" type="String" length="2048"/>
+        <dbkey field="object_type,object_id" unique="true"/>
+    </type>
+    
+    <member name="fpaCategories" type="FpaCategory" collection="true"/>
+    <member name="clients" type="Client" collection="true"/>
+    <member name="suppliers" type="Supplier" collection="true"/>
+    <member name="products" type="Product" collection="true"/>
+    <member name="records" type="Record" collection="true"/>
+    <member name="companies" type="Company" collection="true"/>
+    <member name="clientRecords" type="ClientRecord" collection="true"/>
+    <member name="supplierRecords" type="SupplierRecord" collection="true"/>
+    <member name="invoiceTypes" type="InvoiceType" collection="true"/>
+    <member name="clientPayments" type="ClientPayment" collection="true"/>
+    <member name="invoices" type="Invoice" collection="true"/>
+    <member name="expenseTypes" type="ExpenseType" collection="true"/>
+    <member name="supplierPayments" type="SupplierPayment" collection="true"/>
+    <member name="expenses" type="Expense" collection="true"/>
+    <member name="indexes" type="Index" collection="true"/>
+    
+</project>

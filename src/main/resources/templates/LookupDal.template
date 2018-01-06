@@ -1,0 +1,13 @@
+package [DAL_PACKAGE];
+
+import java.sql.SQLException;
+import java.util.Collection;
+
+public interface LookupDal {
+    public String insert(String id) throws SQLException;
+    public String insertIgnore(String id) throws SQLException;
+    public void delete(String id) throws SQLException;
+    public void update(String oldId, String newId) throws SQLException;
+    public void merge(String idToMerge, String idToMergeWith) throws SQLException;
+    public Collection<String> fetchAll() throws SQLException;
+}
